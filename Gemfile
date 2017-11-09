@@ -10,6 +10,8 @@ gem 'money-rails'
 gem 'devise'
 gem "slim-rails"
 
+gem "bootstrap-sass"
+
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.1.4'
 # Use postgresql as the database for Active Record
