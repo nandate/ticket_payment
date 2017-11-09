@@ -5,3 +5,14 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+
+require "active_record/fixtures"
+
+ActiveRecord::FixtureSet.create_fixtures(
+  "#{Rails.root}/spec/fixtures", "events")
+ActiveRecord::FixtureSet.create_fixtures(
+  "#{Rails.root}/spec/fixtures", "performances")
+ActiveRecord::FixtureSet.create_fixtures(
+  "#{Rails.root}/spec/fixtures", "tickets")
+ActiveRecord::FixtureSet.create_fixtures(
+  "#{Rails.root}/spec/fixtures", "users")
