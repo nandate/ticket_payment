@@ -7,6 +7,8 @@ end
 
 
 gem 'money-rails'
+gem 'devise'
+gem "slim-rails"
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.1.4'
