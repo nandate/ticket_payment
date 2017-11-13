@@ -8,6 +8,8 @@ end
 
 gem 'money-rails'
 gem 'devise'
+gem 'stripe'
+gem 'dotenv-rails'
 
 gem "bootstrap-sass"
 gem "slim-rails", github: "slim-template/slim-rails"
