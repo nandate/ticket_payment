@@ -10,6 +10,8 @@ gem 'money-rails'
 gem 'devise'
 gem 'stripe'
 gem 'dotenv-rails'
+gem 'babel-transpiler'
+gem 'sprockets', github: "rails/sprockets"
 
 gem "bootstrap-sass"
 gem "slim-rails", github: "slim-template/slim-rails"
