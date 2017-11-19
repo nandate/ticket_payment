@@ -65,7 +65,13 @@ group :test do
   gem 'capybara'
   gem 'capybara-screenshot'
   gem 'vcr'
-  gem 'webmock'
+  gem 'webmock'  
+  gem "database_cleaner"
+  gem "fake_stripe"
+  gem "launchy"
+  gem 'poltergeist'
+  gem "selenium-webdriver"
+  gem "sinatra", github: "sinatra/sinatra"
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
