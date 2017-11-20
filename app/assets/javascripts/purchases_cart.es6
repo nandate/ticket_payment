@@ -74,7 +74,7 @@ class CheckoutForm{
   paymentTypeRadio(){ return $(".payment-type-radio") }
 
   selectedPaymentType(){ return $("input[name=payment_type]:checked").val() }
-  
+
   creditCardForm() { return $("#credit-card-info") }
 
   isPayPal() { return this.selectedPaymentType() === "paypal" }
@@ -143,8 +143,6 @@ class PaymentFormHandler{
       this.checkoutForm.setCreditCardVisbility()
     })
   }
-
-
 }
 
 $( () => new PaymentFormHandler())

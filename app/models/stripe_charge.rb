@@ -17,9 +17,8 @@ class StripeCharge
       {amount: payment.price.cents, currency: "usd",
        source: token.id, description: "",
        metadata: { reference: payment.reference}},
-       idempotency_key: payment.reference
-    )
-  rescue Stripe:StripeError => e
+       idempotency_key: payment.reference)
+  rescue Stripe::StripeError => e
     @response = nil
     @error = e
   end
@@ -40,5 +39,5 @@ class StripeCharge
   def failure_attributes
     { status: :failed, full_response: error.to_json }
   end
-  
+
 end
