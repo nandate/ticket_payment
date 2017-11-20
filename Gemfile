@@ -12,6 +12,7 @@ gem 'stripe'
 gem 'dotenv-rails'
 gem 'babel-transpiler'
 gem 'sprockets', github: "rails/sprockets"
+gem 'delayed_job_active_record'
 
 gem "bootstrap-sass"
 gem "slim-rails", github: "slim-template/slim-rails"
@@ -65,7 +66,7 @@ group :test do
   gem 'capybara'
   gem 'capybara-screenshot'
   gem 'vcr'
-  gem 'webmock'  
+  gem 'webmock'
   gem "database_cleaner"
   gem "fake_stripe"
   gem "launchy"
