@@ -13,6 +13,7 @@ gem 'dotenv-rails'
 gem 'babel-transpiler'
 gem 'sprockets', github: "rails/sprockets"
 gem 'delayed_job_active_record'
+gem 'rollbar'
 
 gem "bootstrap-sass"
 gem "slim-rails", github: "slim-template/slim-rails"

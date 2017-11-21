@@ -15,14 +15,20 @@ class PurchasesCart
 
   def run
     Payment.transaction do
-      pre_purchase
-      purchase
-      post_purchase
-      @success = @continue
+      raise PreExistingPaymentException.new(purchase) if existing_payment
+      unless pre_purchase_valid?
+        raise CharSetupValidityException.new(
+          user: user,
+          expected_purchase_cents: purchase_amount.to_i,
+          expected_ticket_ids: expected_ticket_ids)
+      end
+      update_tickets
+      create_payment
+      on_success
     end
-  rescue ActiveRecord::ActiveRecordError => e
-    Rails.logger.error("ACTIVE RECORD ERROR IN TRANSACTION")
-    Rails.logger.error(e)
+  rescue
+    on_failure
+    raise
   end
 
   def pre_purchase_valid?

@@ -1,6 +1,15 @@
 class PurchasesCartJob < ApplicationJob
   queue_as :default
 
+  rescue_form(ChargeSetupValidityException) do |exception|
+    PaymentMailer.notify_failure(exception).deliver_later
+    Rollbar.error(exception)
+  end
+
+  rescue_form(PreExistingPaymentException) do |exception|
+    Rollbar.error(exception)
+  end
+
   def perform(user:, purchase_amount_cents:, expected_ticket_ids:,
       payment_reference:, params:)
     token = StripeToken.new(**card_params(params))
@@ -29,5 +38,5 @@ class PurchasesCartJob < ApplicationJob
       :expiration_year, :cvc,
       :stripe_token).symbolize_keys
   end
-  
+
 end
