@@ -3,8 +3,12 @@ h3 Payment Options
 = form_tag(payment_path,
   class: "credit-card-form form-horizontal", id: "payment-form") do
 
+  /
   = hidden_field_tag(:purchase_amount_cents, @cart.total_cost.cents)
-  = hidden_field_tag(:ticket_ids, @cart.tickets.map(&:id))
+  = hidden_field_tag(@cart.item.attribute, @cart.item_ids)
+  = hidden_field_tag(:pre_purchase_type, @cart.class.name)
+  = hidden_field_tag(:stripe_token, "", id: "spec_stripe_token")
+  /
 
   .bg-danger#error-text
 

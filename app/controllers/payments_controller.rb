@@ -15,11 +15,12 @@ class PaymentsController < ApplicationController
     end
   end
 
-  private def run_workflow(payment_type)
-    case payment_type
-    when "paypal" then paypal_workflow
-    else
-      stripe_workflow
+  private def run_workflow(payment_type, purchase_type)
+    case purchase_type
+    when "SubscriptionCart"
+      stripe_subscription_workflow
+    when "ShoppingCart"
+      payment_type == "paypal" ? paypal_workflow : stripe_workflow
     end
   end
 
