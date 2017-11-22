@@ -8,4 +8,9 @@ class Subscription < ApplicationRecord
       remote_id: stripe_customer.find_subscription_for(plan)
     )
   end
+
+  def currently_active?
+    active? && (end_date > Date.current)
+  end
+  
 end
