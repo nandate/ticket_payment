@@ -15,6 +15,12 @@ gem 'sprockets', github: "rails/sprockets"
 gem 'delayed_job_active_record'
 gem 'rollbar'
 
+gem 'activeadmin', github: "activeadmin/activeadmin"
+gem 'active_admin_theme'
+gem 'inherited_resources', github: "activeadmin/inherited_resources"
+gem 'ransack', github: "activerecord-hackery/ransack"
+gem 'draper', "> 3.x"
+
 gem "bootstrap-sass"
 gem "slim-rails", github: "slim-template/slim-rails"
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
