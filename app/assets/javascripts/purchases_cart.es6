@@ -1,5 +1,15 @@
 class CheckoutForm{
 
+  static cardswipe(data){
+    new CheckoutForm().cardswipe(data)
+  }
+
+  cardswipe(data){
+    this.numberField().val(data.account)
+    this.expiryField().val(`${data.expMonth}/${data.expYear}`)
+    this.cvcField().focus()
+  }
+
   format(){
     this.numberField().payment("formatCardNumber")
     this.expiryField().payment("formatCardExpiry")
@@ -157,6 +167,6 @@ $( () => {
   if ($(".credit-card-form").size() > 0){
     return new PaymentFormHandler()
   }
-  
+
   return null
 })

@@ -21,6 +21,8 @@ gem 'inherited_resources', github: "activeadmin/inherited_resources"
 gem 'ransack', github: "activerecord-hackery/ransack"
 gem 'draper', "> 3.x"
 
+gem 'pundit'
+
 gem "bootstrap-sass"
 gem "slim-rails", github: "slim-template/slim-rails"
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
