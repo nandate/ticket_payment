@@ -145,4 +145,18 @@ class PaymentFormHandler{
   }
 }
 
-$( () => new PaymentFormHandler())
+$( () => {
+  if ($("#admin_credit_card_info").size() > 0){
+    $.cardswipe({
+      firstLineOnly: false,
+      success: CheckoutForm.cardswipe,
+      parsers: ["visa", "amex", "mastercard", "discover", "generic"],
+      debug: false
+    })
+  }
+  if ($(".credit-card-form").size() > 0){
+    return new PaymentFormHandler()
+  }
+  
+  return null
+})

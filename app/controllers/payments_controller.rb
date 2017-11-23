@@ -24,6 +24,24 @@ class PaymentsController < ApplicationController
     end
   end
 
+  private def pick_user
+    if current_user.admin? && params[:user_email].present?
+      User.find_or_create_by(email: params[:user_email])
+    else
+      current_user
+    end
+  end
+
+  private def stripe_subscription_workflow
+    workflow = CreatesSubscriptionViaStripe.new(
+      user: pick_user,
+      expected_subscription_id: params[:subscription_ids].first,
+      token: StripeToken.new(**card_params)
+    )
+    workflow.run
+    workflow
+  end
+
   private def stripe_workflow
     @reference = Payment.generate_reference
     PurchasesCartJob.perform_later(

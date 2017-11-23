@@ -10,6 +10,16 @@ h3 Payment Options
   = hidden_field_tag(:stripe_token, "", id: "spec_stripe_token")
   /
 
+  /
+  - if current_user.admin?
+    #admin_credit_card_info
+      h3 Administrator info
+        .form-group
+          .col-sm-2
+            = label_tag(:user_email, "User Email", class: "control-label")
+          .col-sm-2
+            input.form-control(name="user_email" id="user_email")
+
   .bg-danger#error-text
 
   #credit-card-info
