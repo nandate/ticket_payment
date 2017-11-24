@@ -3,7 +3,7 @@ class ApplicationController < ActionController::Base
 
   include Pundit
 
-  rescue_form Pundit::NotAuthorizedError, with: :user_not_authorized
+  rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
 
   def authenticate_admin_user!
     raise Pundit::NotAuthorizedError unless current_user&.admin?
@@ -13,5 +13,5 @@ class ApplicationController < ActionController::Base
     sign_out(User)
     render plain: "Access Not Allowed", status: :forbidden
   end
-  
+
 end

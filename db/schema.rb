@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171122235214) do
+ActiveRecord::Schema.define(version: 20171124140235) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -60,7 +60,12 @@ ActiveRecord::Schema.define(version: 20171122235214) do
     t.string "price_currency", default: "USD", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "original_line_item_id"
+    t.bigint "administrator_id"
+    t.integer "refund_status", default: 0
+    t.index ["administrator_id"], name: "index_payment_line_items_on_administrator_id"
     t.index ["buyable_type", "buyable_id"], name: "index_payment_line_items_on_buyable_type_and_buyable_id"
+    t.index ["original_line_item_id"], name: "index_payment_line_items_on_original_line_item_id"
     t.index ["payment_id"], name: "index_payment_line_items_on_payment_id"
   end
 
@@ -75,6 +80,10 @@ ActiveRecord::Schema.define(version: 20171122235214) do
     t.json "full_response"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "original_payment_id"
+    t.bigint "administrator_id"
+    t.index ["administrator_id"], name: "index_payments_on_administrator_id"
+    t.index ["original_payment_id"], name: "index_payments_on_original_payment_id"
     t.index ["reference"], name: "index_payments_on_reference"
     t.index ["user_id"], name: "index_payments_on_user_id"
   end
@@ -144,6 +153,7 @@ ActiveRecord::Schema.define(version: 20171122235214) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "stripe_id"
+    t.integer "role", default: 0
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
