@@ -11,4 +11,10 @@ class Ticket < ApplicationRecord
     update(status: :waiting, user: user)
   end
 
+  def refund_successful
+    refunded!
+    new_ticket = dup
+    new_ticket.unsold!
+  end
+
 end
