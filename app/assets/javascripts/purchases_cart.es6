@@ -1,5 +1,24 @@
 class CheckoutForm{
 
+  form() { return $("#payment-form") }
+
+  button() { return this.form().find(".btn") }
+
+  disableButton() { this.button().prop("disabled", true) }
+
+  isButtonDisabled() { return this.button().prop("disabled") }
+
+  submit() { this.form().get(0).submit() }
+
+  appendHidden(name, value) {
+    const field = $("<input>")
+      .attr("type", "hidden")
+      .attr("name", name)
+      .val(value)
+    this.form().append(field)
+  }
+
+/*
   static cardswipe(data){
     new CheckoutForm().cardswipe(data)
   }
@@ -17,7 +36,6 @@ class CheckoutForm{
     this.disableButton()
   }
 
-  form() { return $("#payment-form") }
 
   validFields() { return this.form().find(".valid-field") }
 
@@ -70,15 +88,10 @@ class CheckoutForm{
     return this.isNumberValid() && this.isExpiryValid() && this.isCvcValid()
   }
 
-  button() { return this.form().find(".btn") }
-
-  disableButton() { this.button().prop("disabled", true) }
-
   enableButton() { this.button().toggleClass("disabled", false) }
 
   isEnabled() { return !this.button().hasClass("disabled") }
 
-  isButtonDisabled() { return this.button().prop("disabled") }
 
 
   paymentTypeRadio(){ return $(".payment-type-radio") }
@@ -92,16 +105,7 @@ class CheckoutForm{
   setCreditCardVisbility() {
     this.creditCardForm().toggleClass("hidden", this.isPayPal())
   }
-
-  submit() { this.form().get(0).submit() }
-
-  appendHidden(name, value) {
-    const field = $("<input>")
-      .attr("type", "hidden")
-      .attr("name", name)
-      .val(value)
-    this.form().append(field)
-  }
+*/
 }
 
 class TokenHandler{
@@ -155,6 +159,30 @@ class PaymentFormHandler{
   }
 }
 
+class StripeForm {
+  constructor() {
+    this.checkoutForm = new CheckoutForm()
+    this.initSubmitHandler()
+  }
+
+  initSubmitHandler() {
+    this.checkoutForm.form().submit((event) => { this.handleSubmit(event) })
+  }
+
+  handleSubmit(event) {
+    event.preventDefault()
+    if (this.checkoutForm.isButtonDisabled()) {
+      return false
+    }
+    this.checkoutForm.disableButton()
+    Stripe.card.createToken(this.checkoutForm.form(), TokenHandler.handle)
+    return false
+  }
+}
+
+$(() => new StripeForm())
+
+/*
 $( () => {
   if ($("#admin_credit_card_info").size() > 0){
     $.cardswipe({
@@ -170,3 +198,4 @@ $( () => {
 
   return null
 })
+*/

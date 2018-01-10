@@ -1,4 +1,7 @@
 class Ticket < ApplicationRecord
+
+  include HasReference
+  
   belongs_to :user
   belongs_to :performance
   has_one :event, through: :performance

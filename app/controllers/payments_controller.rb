@@ -7,6 +7,7 @@ class PaymentsController < ApplicationController
 
   def create
     token = StripeToken.new(**card_params)
+    puts token
     workflow = PurchasesCart.new(
         user: current_user, stripe_token: token,
         purchase_amount_cents: params[:purchase_amount_cents])
@@ -59,7 +60,8 @@ class PaymentsController < ApplicationController
   private def card_params
     params.permit(
       :credit_card_number, :expiration_month,
-      :expiration_year, :cvc).to_h.symbolize_keys
+      :expiration_year, :cvc,
+      :stripe_token).to_h.symbolize_keys
   end
 
 end
