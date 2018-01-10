@@ -2,11 +2,14 @@ class PaymentLineItem < ApplicationRecord
   belongs_to :payment
   belongs_to :buyable, polymorphic: true
 
-  has_many :refunds, class_name: "PaymentLineItem",
-                     foreign_key: "original_line_item_id"
-  belongs_to :original_line_item, class_name: "PaymentLineItem"
+  monetize :price_cents
 
-  enum refund_status: {no_refund: 1, refund_pending: 2, refunded: 3}
+=begin
+  #has_many :refunds, class_name: "PaymentLineItem",
+  #                   foreign_key: "original_line_item_id"
+  #belongs_to :original_line_item, class_name: "PaymentLineItem"
+
+  #enum refund_status: {no_refund: 1, refund_pending: 2, refunded: 3}
 
   delegate :performance, to: :buyable, allow_nil: true
   delegate :name, :event, to: :performance, allow_nil: true
@@ -31,5 +34,6 @@ class PaymentLineItem < ApplicationRecord
   def tickets
     [buyable]
   end
-  
+=end
+
 end

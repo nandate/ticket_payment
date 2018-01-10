@@ -6,10 +6,14 @@ class PaymentsController < ApplicationController
   end
 
   def create
-    workflow = run_workflow(params[:payment_type])
+    token = StripeToken.new(**card_params)
+    workflow = PurchasesCart.new(
+        user: current_user, stripe_token: token,
+        purchase_amount_cents: params[:purchase_amount_cents])
+    workflow.run
+
     if workflow.success
-      redirect_to workflow.redirect_on_success_url ||
-          payment_path(id: @reference || workflow.payment.reference)
+      redirect_to payment_path(id: workflow.payment.reference)
     else
       redirect_to shopping_cart_path
     end
@@ -55,8 +59,7 @@ class PaymentsController < ApplicationController
   private def card_params
     params.permit(
       :credit_card_number, :expiration_month,
-      :expiration_year, :cvc,
-      :stripe_token).to_h.symbolize_keys
+      :expiration_year, :cvc).to_h.symbolize_keys
   end
 
 end

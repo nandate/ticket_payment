@@ -5,11 +5,12 @@ class Payment < ApplicationRecord
   has_many :payment_line_items
   has_many :tickets, through: :payment_line_items,
                      source_type: "Ticket", source: "buyable"
-  has_many :refunds, class_name: "Payment",
-                     foreign_key: "original_payment_id"
-  belongs_to :original_payment, class_name: "Payment"
+  #has_many :refunds, class_name: "Payment",
+  #                   foreign_key: "original_payment_id"
+  #belongs_to :original_payment, class_name: "Payment"
 
   monetize :price_cents
+  
   enum status: [:created, :succeeded]
 
   def total_cost
@@ -18,9 +19,8 @@ class Payment < ApplicationRecord
 
   def create_line_items(tickets)
     tickets.each do |ticket|
-      payment_line_items.craete!(
-        buyable: ticket, price_cents: ticket.price.cents
-      )
+      payment_line_items.create!(
+        buyable: ticket, price_cents: ticket.price.cents)
     end
   end
 
