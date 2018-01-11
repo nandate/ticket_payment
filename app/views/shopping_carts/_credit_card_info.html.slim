@@ -1,24 +1,10 @@
 h3 Payment Options
 
-= form_tag(payment_path,
+= form_tag(payments_path,
   class: "credit-card-form form-horizontal", id: "payment-form") do
 
-  /
   = hidden_field_tag(:purchase_amount_cents, @cart.total_cost.cents)
-  = hidden_field_tag(@cart.item.attribute, @cart.item_ids)
-  = hidden_field_tag(:pre_purchase_type, @cart.class.name)
-  = hidden_field_tag(:stripe_token, "", id: "spec_stripe_token")
-  /
-
-  /
-  - if current_user.admin?
-    #admin_credit_card_info
-      h3 Administrator info
-        .form-group
-          .col-sm-2
-            = label_tag(:user_email, "User Email", class: "control-label")
-          .col-sm-2
-            input.form-control(name="user_email" id="user_email")
+  = hidden_field_tag(:ticket_ids, @cart.tickets.map(&:id))
 
   .bg-danger#error-text
 
@@ -33,7 +19,7 @@ h3 Payment Options
         input.form-control.valid-field(data-stripe="number"
           id="credit_card_number")
       .col-sm-1
-        = image_tag("credicards/credit.png", id: "card-image")
+        = image_tag("creditcards/credit.png", id: "card-image")
   .row
     .form-group
       .col-sm-2

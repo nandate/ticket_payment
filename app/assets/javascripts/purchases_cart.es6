@@ -1,34 +1,5 @@
 class CheckoutForm{
 
-  form() { return $("#payment-form") }
-
-  button() { return this.form().find(".btn") }
-
-  disableButton() { this.button().prop("disabled", true) }
-
-  isButtonDisabled() { return this.button().prop("disabled") }
-
-  submit() { this.form().get(0).submit() }
-
-  appendHidden(name, value) {
-    const field = $("<input>")
-      .attr("type", "hidden")
-      .attr("name", name)
-      .val(value)
-    this.form().append(field)
-  }
-
-/*
-  static cardswipe(data){
-    new CheckoutForm().cardswipe(data)
-  }
-
-  cardswipe(data){
-    this.numberField().val(data.account)
-    this.expiryField().val(`${data.expMonth}/${data.expYear}`)
-    this.cvcField().focus()
-  }
-
   format(){
     this.numberField().payment("formatCardNumber")
     this.expiryField().payment("formatCardExpiry")
@@ -36,7 +7,9 @@ class CheckoutForm{
     this.disableButton()
   }
 
+  form() { return $("#payment-form") }
 
+  //
   validFields() { return this.form().find(".valid-field") }
 
   numberField() { return this.form().find("#credit_card_number") }
@@ -44,7 +17,9 @@ class CheckoutForm{
   expiryField() { return this.form().find("#expiration_date") }
 
   cvcField() { return this.form().find("#cvc") }
+  //
 
+  //
   displayStatus(){
     this.displayFieldStatus(this.numberField(), this.isNumberValid())
     this.displayFieldStatus(this.expiryField(), this.isExpiryValid())
@@ -88,9 +63,41 @@ class CheckoutForm{
     return this.isNumberValid() && this.isExpiryValid() && this.isCvcValid()
   }
 
+  button() { return this.form().find(".btn") }
+
+  disableButton() { this.button().prop("disabled", true) }
+
   enableButton() { this.button().toggleClass("disabled", false) }
 
   isEnabled() { return !this.button().hasClass("disabled") }
+
+  isButtonDisabled() { return this.button().prop("disabled") }
+  //
+  
+  creditCardForm() { return $("#credit-card-info") }
+
+  submit() { this.form().get(0).submit() }
+
+  appendHidden(name, value) {
+    const field = $("<input>")
+      .attr("type", "hidden")
+      .attr("name", name)
+      .val(value)
+    this.form().append(field)
+  }
+
+/*
+  static cardswipe(data){
+    new CheckoutForm().cardswipe(data)
+  }
+
+  cardswipe(data){
+    this.numberField().val(data.account)
+    this.expiryField().val(`${data.expMonth}/${data.expYear}`)
+    this.cvcField().focus()
+  }
+
+
 
 
 
@@ -132,6 +139,7 @@ class TokenHandler{
   }
 }
 
+/*
 class PaymentFormHandler{
 
   constructor(){
@@ -158,15 +166,23 @@ class PaymentFormHandler{
     })
   }
 }
+*/
 
 class StripeForm {
   constructor() {
     this.checkoutForm = new CheckoutForm()
+    this.checkoutForm.format()
     this.initSubmitHandler()
   }
 
   initSubmitHandler() {
-    this.checkoutForm.form().submit((event) => { this.handleSubmit(event) })
+    this.checkoutForm.form().submit((event) => {
+       this.handleSubmit(event)
+    })
+
+    this.checkoutForm.validFields().keyup(() => {
+      this.checkoutForm.displayStatus()
+    })
   }
 
   handleSubmit(event) {
