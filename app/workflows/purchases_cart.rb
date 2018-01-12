@@ -1,45 +1,29 @@
 class PurchasesCart
   attr_accessor :user, :stripe_token,
-      :purchase_amount, :success, :payment
+      :purchase_amount, :success,
+      :payment, :expected_ticket_ids
 
-  def initialize(user: nil, stripe_token:, purchase_amount_cents: nil)
+  def initialize(user: nil, stripe_token:, purchase_amount_cents: nil, expected_ticket_ids: "")
     @user = user
     @stripe_token = stripe_token
     @purchase_amount = Money.new(purchase_amount_cents)
     @success = false
-    #@continue = true
-    #@expected_ticket_ids = expected_ticket_ids.split(" ").map(&:to_i).sort
+    @continue = true
+    @expected_ticket_ids = expected_ticket_ids.split(" ").map(&:to_i).sort
     #@payment_reference = payment_reference || Payment.generate_reference
   end
 
   def run
     Payment.transaction do
-      purchase_tickets
-      create_payment
+      pre_purchase
       charge
-      @success = payment.succeeded?
+      post_purchase
+      @success = @continue
     end
+  rescue ActiveRecord::ActiveRecordError => e
+    Rails.logger.error("ACTIVE RECORD ERROR IN TRANSACTION")
+    Rails.logger.error(e)
   end
-=begin
-  def run
-    Payment.transaction do
-      raise PreExistingPaymentException.new(purchase) if existing_payment
-      unless pre_purchase_valid?
-        raise CharSetupValidityException.new(
-          user: user,
-          expected_purchase_cents: purchase_amount.to_i,
-          expected_ticket_ids: expected_ticket_ids)
-      end
-      update_tickets
-      create_payment
-      on_success
-    end
-  rescue
-    on_failure
-    raise
-  end
-
-=end
 
   def pre_purchase_valid?
     purchase_amount == tickets.map(&:price).sum &&
@@ -57,17 +41,13 @@ class PurchasesCart
     tickets.each(&:purchased!)
   end
 
-  def existing_payment
-    Payment.find_by(reference: payment_reference)
-  end
 
   def pre_purchase
-    return true if existing_payment
     unless pre_purchase_valid?
       @continue = false
       return
     end
-    update_tickets
+    purchase_tickets
     create_payment
     @continue = true
   end
@@ -78,8 +58,6 @@ class PurchasesCart
 
   def create_payment
     self.payment = Payment.create!(payment_attributes)
-    #self.payment = existing_payment || Payment.new
-    #payment.update!(payment_attributes)
     payment.create_line_items(tickets)
   end
 
@@ -90,14 +68,25 @@ class PurchasesCart
   end
 
   def charge
+    return unless @continue
     charge = StripeCharge.charge(token: stripe_token, payment: payment)
     payment.update!(
       status: charge.status, response_id: charge.id,
       full_response: charge.to_json)
+    reverse_purchase if payment.failed?
   end
 
   def success?
     success
+  end
+
+  def unpurchase_tickets
+    tickets.each(&:waiting!)
+  end
+
+  def reverse_purchase
+    unpurchase_tickets
+    @continue = false
   end
 
   def calculate_success

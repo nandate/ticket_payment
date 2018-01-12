@@ -73,7 +73,7 @@ class CheckoutForm{
 
   isButtonDisabled() { return this.button().prop("disabled") }
   //
-  
+
   creditCardForm() { return $("#credit-card-info") }
 
   submit() { this.form().get(0).submit() }
@@ -176,7 +176,7 @@ class StripeForm {
   }
 
   initSubmitHandler() {
-    this.checkoutForm.form().submit((event) => {
+    this.checkoutForm.form().submit(event => {
        this.handleSubmit(event)
     })
 

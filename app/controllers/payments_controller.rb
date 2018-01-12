@@ -7,7 +7,6 @@ class PaymentsController < ApplicationController
 
   def create
     token = StripeToken.new(**card_params)
-    puts token
     workflow = PurchasesCart.new(
         user: current_user, stripe_token: token,
         purchase_amount_cents: params[:purchase_amount_cents])
