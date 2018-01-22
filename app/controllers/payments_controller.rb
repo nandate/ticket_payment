@@ -6,25 +6,11 @@ class PaymentsController < ApplicationController
   end
 
   def create
-    token = StripeToken.new(**card_params)
-    workflow = PurchasesCart.new(
-        user: current_user, stripe_token: token,
-        purchase_amount_cents: params[:purchase_amount_cents])
-    workflow.run
-
+    workflow = stripe_workflow
     if workflow.success
       redirect_to payment_path(id: workflow.payment.reference)
     else
       redirect_to shopping_cart_path
-    end
-  end
-
-  private def run_workflow(payment_type, purchase_type)
-    case purchase_type
-    when "SubscriptionCart"
-      stripe_subscription_workflow
-    when "ShoppingCart"
-      payment_type == "paypal" ? paypal_workflow : stripe_workflow
     end
   end
 
@@ -48,7 +34,7 @@ class PaymentsController < ApplicationController
 
   private def stripe_workflow
     @reference = Payment.generate_reference
-    PurchasesCartJob.perform_later(
+    PreparesCartForStripeJob.perform_later(
       user: current_user,
       params: card_params,
       purchase_amount_cents: params[:purchase_amount_cents],
