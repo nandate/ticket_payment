@@ -1,4 +1,4 @@
-class CharSetupValidityException < StandardError
+class ChargeSetupValidityException < StandardError
 
   attr_accessor :message, :user, :exception_purchase_cents, :expected_ticket_ids
 
@@ -9,5 +9,5 @@ class CharSetupValidityException < StandardError
     @expected_purchase_cents = expected_purchase_cents
     @expected_ticket_ids = expected_ticket_ids
   end
-  
+
 end

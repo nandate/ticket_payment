@@ -8,7 +8,8 @@ class PaymentsController < ApplicationController
   def create
     workflow = stripe_workflow
     if workflow.success
-      redirect_to payment_path(id: workflow.payment.reference)
+      redirect_to workflow.redirect_on_success_url ||
+          payment_path(id: @reference || workflow.payment.reference)
     else
       redirect_to shopping_cart_path
     end

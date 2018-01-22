@@ -1,12 +1,12 @@
 class PreparesCartForStripeJob < ApplicationJob
   queue_as :default
 
-  rescue_form(ChargeSetupValidityException) do |exception|
+  rescue_from(ChargeSetupValidityException) do |exception|
     PaymentMailer.notify_failure(exception).deliver_later
     Rollbar.error(exception)
   end
 
-  rescue_form(PreExistingPaymentException) do |exception|
+  rescue_from(PreExistingPaymentException) do |exception|
     Rollbar.error(exception)
   end
 
@@ -38,5 +38,5 @@ class PreparesCartForStripeJob < ApplicationJob
       :expiration_year, :cvc,
       :stripe_token).symbolize_keys
   end
-  
+
 end
