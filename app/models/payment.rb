@@ -10,8 +10,8 @@ class Payment < ApplicationRecord
   #belongs_to :original_payment, class_name: "Payment"
 
   monetize :price_cents
-  
-  enum status: [:created, :succeeded]
+
+  enum status: {created: 0, succeeded:1, pending: 2, failed: 3}
 
   def total_cost
     tickets.map(&:price).sum
